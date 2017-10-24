@@ -1,14 +1,14 @@
 ---
-- include: add_postgres_repos.yaml
+- include: add_postgres_repos.yml
 
 - name: Install Postgres related packages
   yum:
     name: "{{ item }}"
   with_items: "{{ packages_to_install }}"
 
-- include: pg_init.yaml
+- include: pg_init.yml
 
-- include: configure_pg.yaml
+- include: configure_pg.yml
 
 - name: Enable Postgres related services
   service:
