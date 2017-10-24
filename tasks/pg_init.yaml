@@ -1,0 +1,19 @@
+---
+- name: Initialize postgres (if needed)
+  command: "/usr/pgsql-{{ pg_ver }}/bin/postgresql{{ pg_package_ver }}-setup initdb"
+  args:
+    creates: "/var/lib/pgsql/{{ pg_ver }}/data/postgresql.conf"
+
+- name: Move pg_xlog
+  command: "mv /var/lib/pgsql/{{ pg_ver }}/data/pg_xlog /var/lib/pgsql/pglogs/"
+  args:
+    creates: "/var/lib/pgsql/pglogs/pg_xlog"
+
+- name: Symlink logs into pg data folder
+  file:
+    src: "/var/lib/pgsql/pglogs/pg_xlog"
+    dest: "/var/lib/pgsql/{{ pg_ver }}/data/pg_xlog"
+    state: link
+    owner: postgres
+    group: postgres
+  notify: reload postgresql

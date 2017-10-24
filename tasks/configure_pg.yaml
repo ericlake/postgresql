@@ -1,0 +1,17 @@
+---
+- name: Set listen address
+  replace:
+    path: "/var/lib/pgsql/{{ pg_ver }}/data/postgresql.conf"
+    regexp: "^#listen_addresses = 'localhost'"
+    replace: "listen_addresses = '*'"
+  notify: reload postgresql
+
+- name: Configure host based authentication (if entries are configured).
+  template:
+    src: "templates/pg_hba.conf.j2"
+    dest: "/var/lib/pgsql/{{ pg_ver }}/data/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: 0600
+  notify: restart postgresql
+  when: postgresql_hba_entries
