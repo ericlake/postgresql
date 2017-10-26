@@ -8,6 +8,7 @@
   command: "mv /var/lib/pgsql/{{ pg_ver }}/data/pg_xlog /var/lib/pgsql/pglogs/"
   args:
     creates: "/var/lib/pgsql/pglogs/pg_xlog"
+  when: pg_split_logs_and_data
 
 - name: Symlink logs into pg data folder
   file:
@@ -17,3 +18,4 @@
     owner: postgres
     group: postgres
   notify: reload postgresql
+  when: pg_split_logs_and_data
