@@ -13,5 +13,5 @@
     owner: postgres
     group: postgres
     mode: 0600
-  notify: restart postgresql
+  notify: reload postgresql
   when: postgresql_hba_entries
